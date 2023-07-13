@@ -1,0 +1,1 @@
+import{_ as t,o as e,c as s}from"./index.2e7559f1.js";const c={},n={class:"sm:px-6 p-4 text-3xl font-medium text-gray-200"};function o(r,_){return e(),s("h3",n,"Settings")}const f=t(c,[["render",o]]);export{f as default};
