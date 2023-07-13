@@ -1,0 +1,35 @@
+import { PrismaService } from 'src/prisma/prisma.service';
+import * as O from 'fp-ts/Option';
+import * as E from 'fp-ts/Either';
+import * as TO from 'fp-ts/TaskOption';
+import * as TE from 'fp-ts/TaskEither';
+import { AuthUser } from 'src/types/AuthUser';
+import { User } from './user.model';
+import { PubSubService } from 'src/pubsub/pubsub.service';
+import { UserDataHandler } from './user.data.handler';
+import { User as DbUser } from '@prisma/client';
+export declare class UserService {
+    private prisma;
+    private readonly pubsub;
+    constructor(prisma: PrismaService, pubsub: PubSubService);
+    private userDataHandlers;
+    registerUserDataHandler(handler: UserDataHandler): void;
+    convertDbUserToUser(dbUser: DbUser): User;
+    findUserByEmail(email: string): Promise<O.None | O.Some<AuthUser>>;
+    findUserById(userUid: string): Promise<O.None | O.Some<AuthUser>>;
+    UpdateUserRefreshToken(refreshTokenHash: string, userUid: string): Promise<E.Right<DbUser> | E.Left<"user/not_found">>;
+    createUserViaMagicLink(email: string): Promise<DbUser>;
+    createUserSSO(accessTokenSSO: string, refreshTokenSSO: string, profile: any): Promise<DbUser>;
+    createProviderAccount(user: AuthUser, accessToken: string, refreshToken: string, profile: any): Promise<import("@prisma/client").Account>;
+    updateUserDetails(user: AuthUser, profile: any): Promise<E.Right<DbUser> | E.Left<"user/not_found">>;
+    updateUserSessions(user: AuthUser, currentSession: string, sessionType: string): Promise<E.Right<User> | E.Left<string>>;
+    validateSession(sessionData: string): Promise<E.Right<any> | E.Left<string>>;
+    fetchAllUsers(cursorID: string, take: number): Promise<DbUser[]>;
+    getUsersCount(): Promise<number>;
+    makeAdmin(userUID: string): Promise<E.Right<DbUser> | E.Left<"user/not_found">>;
+    fetchAdminUsers(): Promise<DbUser[]>;
+    deleteUserAccount(uid: string): Promise<E.Left<"user/not_found"> | E.Right<boolean>>;
+    getUserDeletionErrors(user: AuthUser): TO.TaskOption<string[]>;
+    deleteUserByUID(user: AuthUser): TE.TaskEither<string, boolean>;
+    removeUserAsAdmin(userUID: string): Promise<E.Right<DbUser> | E.Left<"user/not_found">>;
+}

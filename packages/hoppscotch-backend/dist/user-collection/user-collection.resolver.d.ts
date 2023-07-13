@@ -1,0 +1,34 @@
+import { PubSubService } from 'src/pubsub/pubsub.service';
+import { AuthUser } from 'src/types/AuthUser';
+import { UserCollectionService } from './user-collection.service';
+import { UserCollection, UserCollectionExportJSONData } from './user-collections.model';
+import { PaginationArgs } from 'src/types/input-types.args';
+import { CreateChildUserCollectionArgs, CreateRootUserCollectionArgs, ImportUserCollectionsFromJSONArgs, MoveUserCollectionArgs, RenameUserCollectionsArgs, UpdateUserCollectionArgs } from './input-type.args';
+import { ReqType } from 'src/types/RequestTypes';
+export declare class UserCollectionResolver {
+    private readonly userCollectionService;
+    private readonly pubSub;
+    constructor(userCollectionService: UserCollectionService, pubSub: PubSubService);
+    user(user: AuthUser): Promise<import("@prisma/client").User>;
+    parent(collection: UserCollection): Promise<import("@prisma/client").UserCollection>;
+    childrenREST(collection: UserCollection, args: PaginationArgs): Promise<import("@prisma/client").UserCollection[]>;
+    childrenGQL(collection: UserCollection, args: PaginationArgs): Promise<import("@prisma/client").UserCollection[]>;
+    rootRESTUserCollections(user: AuthUser, args: PaginationArgs): Promise<import("@prisma/client").UserCollection[]>;
+    rootGQLUserCollections(user: AuthUser, args: PaginationArgs): Promise<import("@prisma/client").UserCollection[]>;
+    userCollection(userCollectionID: string): Promise<import("@prisma/client").UserCollection>;
+    exportUserCollectionsToJSON(user: AuthUser, collectionID: string, collectionType: ReqType): Promise<UserCollectionExportJSONData>;
+    createRESTRootUserCollection(user: AuthUser, args: CreateRootUserCollectionArgs): Promise<import("@prisma/client").UserCollection>;
+    createGQLRootUserCollection(user: AuthUser, args: CreateRootUserCollectionArgs): Promise<import("@prisma/client").UserCollection>;
+    createGQLChildUserCollection(user: AuthUser, args: CreateChildUserCollectionArgs): Promise<import("@prisma/client").UserCollection>;
+    createRESTChildUserCollection(user: AuthUser, args: CreateChildUserCollectionArgs): Promise<import("@prisma/client").UserCollection>;
+    renameUserCollection(user: AuthUser, args: RenameUserCollectionsArgs): Promise<import("@prisma/client").UserCollection>;
+    deleteUserCollection(userCollectionID: string, user: AuthUser): Promise<boolean>;
+    moveUserCollection(args: MoveUserCollectionArgs, user: AuthUser): Promise<import("@prisma/client").UserCollection>;
+    updateUserCollectionOrder(args: UpdateUserCollectionArgs, user: AuthUser): Promise<boolean>;
+    importUserCollectionsFromJSON(args: ImportUserCollectionsFromJSONArgs, user: AuthUser): Promise<boolean>;
+    userCollectionCreated(user: AuthUser): AsyncIterator<unknown, any, undefined>;
+    userCollectionUpdated(user: AuthUser): AsyncIterator<unknown, any, undefined>;
+    userCollectionRemoved(user: AuthUser): AsyncIterator<unknown, any, undefined>;
+    userCollectionMoved(user: AuthUser): AsyncIterator<unknown, any, undefined>;
+    userCollectionOrderUpdated(user: AuthUser): AsyncIterator<unknown, any, undefined>;
+}

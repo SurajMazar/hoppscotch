@@ -9,7 +9,7 @@ COPY . .
 RUN pnpm install
 
 WORKDIR /usr/src/app/packages/hoppscotch-selfhost-web/
-RUN pnpm run build
+#RUN pnpm run build
 
 
 # Final stage, take the build artifacts and package it into a static Caddy server

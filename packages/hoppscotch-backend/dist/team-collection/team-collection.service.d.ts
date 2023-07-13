@@ -1,0 +1,38 @@
+import { PrismaService } from '../prisma/prisma.service';
+import { TeamCollection } from './team-collection.model';
+import { PubSubService } from '../pubsub/pubsub.service';
+import * as E from 'fp-ts/Either';
+import { TeamCollection as DBTeamCollection } from '@prisma/client';
+export declare class TeamCollectionService {
+    private readonly prisma;
+    private readonly pubsub;
+    constructor(prisma: PrismaService, pubsub: PubSubService);
+    TITLE_LENGTH: number;
+    private generatePrismaQueryObjForFBCollFolder;
+    private exportCollectionToJSONObject;
+    exportCollectionsToJSON(teamID: string): Promise<E.Right<string> | E.Left<unknown>>;
+    importCollectionsFromJSON(jsonString: string, destTeamID: string, destCollectionID: string | null): Promise<E.Left<string> | E.Right<boolean>>;
+    replaceCollectionsWithJSON(jsonString: string, destTeamID: string, destCollectionID: string | null): Promise<E.Left<string> | E.Right<boolean>>;
+    private cast;
+    getTeamOfCollection(collectionID: string): Promise<E.Right<import("@prisma/client").Team> | E.Left<"team/invalid_coll_id">>;
+    getParentOfCollection(collectionID: string): Promise<DBTeamCollection>;
+    getChildrenOfCollection(collectionID: string, cursor: string | null, take: number): import("@prisma/client").PrismaPromise<DBTeamCollection[]>;
+    getTeamRootCollections(teamID: string, cursor: string | null, take: number): Promise<DBTeamCollection[]>;
+    getCollection(collectionID: string): Promise<E.Left<string> | E.Right<DBTeamCollection>>;
+    private isOwnerCheck;
+    private getChildCollectionsCount;
+    private getRootCollectionsCount;
+    createCollection(teamID: string, title: string, parentTeamCollectionID: string | null): Promise<E.Left<string> | E.Right<TeamCollection>>;
+    renameCollection(collectionID: string, newTitle: string): Promise<E.Left<string> | E.Right<DBTeamCollection>>;
+    private updateOrderIndex;
+    private removeTeamCollection;
+    private deleteCollectionData;
+    deleteCollection(collectionID: string): Promise<E.Left<string> | E.Right<boolean>>;
+    private changeParent;
+    private isParent;
+    moveCollection(collectionID: string, destCollectionID: string | null): Promise<E.Left<string> | E.Right<TeamCollection>>;
+    getCollectionCount(collectionID: string): Promise<number>;
+    updateCollectionOrder(collectionID: string, nextCollectionID: string | null): Promise<E.Left<string> | E.Right<boolean>>;
+    totalCollectionsInTeam(teamID: string): Promise<number>;
+    getTeamCollectionsCount(): Promise<number>;
+}
